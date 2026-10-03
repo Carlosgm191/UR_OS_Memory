@@ -11,6 +11,8 @@ package ur_os.system;
 public enum SimulationType {
     PROCESS_PLANNING,
     MEMORY_MANAGEMENT,
+    MEMORY_TEST_1,
+    MEMORY_TEST_2,
     ALL
     
 }

@@ -5,7 +5,6 @@
 package ur_os.memory.paging;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import ur_os.system.OS;
 
 /**
@@ -119,12 +118,12 @@ public class PageTable {
         }
     }
     
-    public LinkedList<PageTableEntry> getValidList(){
-        LinkedList<PageTableEntry> validPages= new LinkedList();
+    public ArrayList<Integer> getValidList(){
+        ArrayList<Integer> validPages= new ArrayList();
         int i=0;
         for(PageTableEntry p: pageTable){
             if(p.isValid()){
-                validPages.add(p);
+                validPages.add(i);
             }
             i++;
         }

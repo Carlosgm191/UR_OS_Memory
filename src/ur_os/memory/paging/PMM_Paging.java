@@ -101,41 +101,56 @@ public class PMM_Paging extends ProcessMemoryManager{
     }
     
     public MemoryAddress getPageMemoryAddressFromLocalAddress(int locAdd){
-        
-        //Include your code here
-        
-        
-        return new MemoryAddress(-1, -1);
-    }
     
+    int pageSize = OS.PAGE_SIZE;
+
+    int page = locAdd / pageSize;
+    int offset = locAdd % pageSize;
+
+    return new MemoryAddress(page, offset);
+}
+   
     public int getFrameMemoryAddressFromLogicalMemoryAddress(int page){
-        
-        //Include your code here
-        
-        return -1;
-    }
+    
+    return pt.getFrameIdFromPage(page);
+}
     
     public MemoryAddress getFrameMemoryAddressFromLogicalMemoryAddress(MemoryAddress m){
-        
-        //Include your code here
-        //Return null if the address is not loaded in a frame (just for virtual memory)
-        //Include a memory access to the page that is being accessed and that is loaded
-        
+    
+    int page = m.getDivision();
+    int offset = m.getOffset();
+
+    int frame = pt.getFrameIdFromPage(page);
+
+    if(frame < 0){
+        System.out.println("Page Fault");
         return new MemoryAddress(-1, -1);
     }
-    
+
+    int physicalAddress = frame * OS.PAGE_SIZE + offset;
+
+    return new MemoryAddress(physicalAddress, 0);
+}
     
     public int getVFrameMemoryAddressFromLogicalMemoryAddress(int page){
         return getVFrameMemoryAddressFromLogicalMemoryAddress(new MemoryAddress(page, 0)).getDivision();
     }
     
-    public MemoryAddress getVFrameMemoryAddressFromLogicalMemoryAddress(MemoryAddress m){
-        
-        //Include your code here
-        
+   public MemoryAddress getVFrameMemoryAddressFromLogicalMemoryAddress(MemoryAddress m){
+    
+    int page = m.getDivision();
+    int offset = m.getOffset();
+
+    int frame = vpt.getFrameIdFromPage(page);
+
+    if(frame < 0){
         return new MemoryAddress(-1, -1);
     }
-    
+
+    int physicalAddress = frame * OS.PAGE_SIZE + offset;
+
+    return new MemoryAddress(physicalAddress, 0);
+}
    
     
      @Override
@@ -169,7 +184,7 @@ public class PMM_Paging extends ProcessMemoryManager{
     @Override
     public int getVictim(){
         if(this.loadedPages == this.assignedPages)
-            return pvmm.getVictim(memoryAccesses,this.pt);
+            return pvmm.getVictim(memoryAccesses,this.pt.getValidList());
         else
             return -1;
     }

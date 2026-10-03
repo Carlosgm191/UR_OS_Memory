@@ -4,9 +4,8 @@
  */
 package ur_os.virtualmemory;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
-import ur_os.memory.paging.PageTable;
-import ur_os.memory.paging.PageTableEntry;
 
 /**
  *
@@ -19,21 +18,14 @@ public class PVMM_LRU extends ProcessVirtualMemoryManager{
     }
     
     @Override
-    public int getVictim(LinkedList<Integer> memoryAccesses, PageTable pt) {
+    public int getVictim(LinkedList<Integer> memoryAccesses, ArrayList<Integer> validList) {
         LinkedList<Integer> pages = new LinkedList();
         int size = memoryAccesses.size()-1;
-        LinkedList<Integer> validListPages = new LinkedList();
-        int i=0;
-        for(PageTableEntry pte: pt.getList()){
-            if(pte.isValid()){
-                validListPages.add(i);
-            }
-            i++;
-        }
+        int loaded = validList.size();
         int temp;
-        while(size >= 0 && pages.size()<validListPages.size()){
+        while(size >= 0 && pages.size()<loaded){
             temp = memoryAccesses.get(size);
-            if(!pages.contains(temp) && validListPages.contains(temp)){
+            if(!pages.contains(temp) && validList.contains(temp)){
                 pages.add(memoryAccesses.get(size));
             }
             size--;

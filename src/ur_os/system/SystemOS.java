@@ -62,11 +62,23 @@ public class SystemOS implements Runnable{
         processes = new ArrayList();
         //initSimulationQueue();
         //initSimulationQueueSimple();
-        initSimulationQueueSimpler();
-        
+        this.simType = simType; // 👈 PRIMERO ESTO
+
+       switch(simType){
+            case MEMORY_TEST_1:
+                 initMemoryTestScenario();
+                 break;
+
+            case MEMORY_TEST_2:
+                initMemoryTestScenario2();
+                break;
+
+            default:
+                  initSimulationQueueSimpler();
+                 break;
+        }
 
         showProcesses();
-        this.simType = simType;
     }
     
     public int getTime(){
@@ -295,9 +307,7 @@ public class SystemOS implements Runnable{
         return simType;
     }
     
-    public int getClock(){
-        return clock;
-    }
+    
     
     @Override
     public void run() {
@@ -470,6 +480,117 @@ public class SystemOS implements Runnable{
         
         return tot/processes.size();
     }
+
+    public void initMemoryTestScenario(){
+
+    Process p;
+
+    // P0
+    p = new Process(0,0);
+    p.setSize(300);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    // P1
+    p = new Process(1,2);
+    p.setSize(500);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    // P2
+    p = new Process(2,4);
+    p.setSize(200);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    // P3
+    p = new Process(3,6);
+    p.setSize(350);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    // P4
+    p = new Process(4,11);
+    p.setSize(400);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    // P5
+    p = new Process(5,13);
+    p.setSize(250);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    // P6
+    p = new Process(6,15);
+    p.setSize(450);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    clock = 0;
+    }
     
+    public void initMemoryTestScenario2(){
+
+    Process p;
+
+    p = new Process(0,0);
+    p.setSize(600);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    p = new Process(1,1);
+    p.setSize(400);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    p = new Process(2,3);
+    p.setSize(300);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    p = new Process(3,5);
+    p.setSize(700);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    p = new Process(4,9);
+    p.setSize(200);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    p = new Process(5,11);
+    p.setSize(500);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    p = new Process(6,13);
+    p.setSize(350);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    p = new Process(7,15);
+    p.setSize(450);
+    p.addCPUInstructions(3);
+    p.addInstruction(new EndInstruction());
+    processes.add(p);
+
+    clock = 0;
+    }
+
     
 }

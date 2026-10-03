@@ -20,6 +20,7 @@ import ur_os.memory.freememorymagament.FreeMemoryManager;
 import ur_os.memory.freememorymagament.MemorySlot;
 import ur_os.memory.freememorymagament.FreeMemorySlotManager;
 import ur_os.memory.freememorymagament.WorstFitMemorySlotManager;
+import ur_os.memory.freememorymagament.NextFitMemorySlotManager;
 import ur_os.memory.segmentation.PMM_Segmentation;
 import static ur_os.memory.MemoryManagerType.CONTIGUOUS;
 import ur_os.memory.SystemMemoryManager;
@@ -55,8 +56,8 @@ public class OS {
     
     public static final int MAX_PROCESS_PRIORITY = 10; //Page size in bytes
     public static final int PAGE_SIZE = 64; //Page size in bytes
-    public static final MemoryManagerType SMM = MemoryManagerType.CONTIGUOUS;
-    public static final FreeMemorySlotManagerType MSM = FreeMemorySlotManagerType.FIRST_FIT;
+    public static MemoryManagerType SMM = MemoryManagerType.CONTIGUOUS;
+    public static FreeMemorySlotManagerType MSM = FreeMemorySlotManagerType.FIRST_FIT;
     
     public static final ProcessVirtualMemoryManagerType PVMM = ProcessVirtualMemoryManagerType.LRU;
     public static final int FRAMES_PER_PROCESS = 3; //Maximum number of frames assigned to a process, if virtual memory is on
@@ -99,6 +100,10 @@ public class OS {
             case WORST_FIT:
                 fmm = new WorstFitMemorySlotManager(SystemOS.MEMORY_SIZE);
                 fvmm = new WorstFitMemorySlotManager(SystemOS.SWAP_MEMORY_SIZE);
+                break;  
+            case NEXT_FIT:
+                fmm = new NextFitMemorySlotManager(SystemOS.MEMORY_SIZE);
+                fvmm = new NextFitMemorySlotManager(SystemOS.SWAP_MEMORY_SIZE);
                 break;
             }
         }
@@ -405,7 +410,4 @@ public class OS {
         return system.getSimulationType();
     }
     
-    public int getClock(){
-        return system.getClock();
-    }
 }

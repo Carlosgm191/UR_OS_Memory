@@ -83,27 +83,56 @@ public class SegmentTable {
     }
     
     public MemoryAddress getSegmentMemoryAddressFromLocalAddress(int locAdd, boolean store){
-        int segment = -1;
-        int offset = -1;
-        
-        //Include your code here
-        
-        //For Virtual Memory
-        if(store){
-            this.segmentTable.get(segment).setDirty();
-        }
-              
-        System.out.println("Accessing Segment "+segment+" and offset "+offset);
-        return new MemoryAddress(segment, offset);
-    }
     
-    public MemoryAddress getPhysicalMemoryAddressFromLogicalMemoryAddress(MemoryAddress m){
+    int segment = -1;
+    int offset = -1;
+    
+    int sum = 0;
+
+    for(int i = 0; i < segmentTable.size(); i++){
+        int limit = segmentTable.get(i).getLimit();
         
-        //Include your code here
+        if(locAdd < sum + limit){
+            segment = i;
+            offset = locAdd - sum;
+            break;
+        }
         
+        sum += limit;
+    }
+
+    // Validación
+    if(segment == -1){
+        System.out.println("Error: Address out of bounds");
         return new MemoryAddress(-1, -1);
     }
+
+    // Para memoria virtual
+    if(store){
+        segmentTable.get(segment).setDirty();
+    }
+
+    System.out.println("Accessing Segment "+segment+" and offset "+offset);
+    return new MemoryAddress(segment, offset);
+}
     
+   public MemoryAddress getPhysicalMemoryAddressFromLogicalMemoryAddress(MemoryAddress m){
+    
+    int segment = m.getDivision(); 
+    int offset = m.getOffset();     
+
+    SegmentTableEntry ste = segmentTable.get(segment);
+
+    if(offset >= ste.getLimit()){
+        System.out.println("Segmentation Fault");
+        return new MemoryAddress(-1, -1);
+    }
+
+    int physicalAddress = ste.getBase() + offset;
+
+    return new MemoryAddress(physicalAddress, 0);
+}
+   
     public SegmentTableEntry getSegment(int i){
         return segmentTable.get(i);
     }

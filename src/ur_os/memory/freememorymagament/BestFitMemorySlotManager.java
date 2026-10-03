@@ -4,10 +4,6 @@
  */
 package ur_os.memory.freememorymagament;
 
-/**
- *
- * @author super
- */
 public class BestFitMemorySlotManager extends FreeMemorySlotManager{
     
     public BestFitMemorySlotManager(int memSize){
@@ -16,10 +12,26 @@ public class BestFitMemorySlotManager extends FreeMemorySlotManager{
     
     @Override
     public MemorySlot getSlot(int size) {
-        MemorySlot m = null;
-        //ToDo
-        
-        return m;
+        MemorySlot best = null;
+
+        for (MemorySlot memorySlot : list) {
+            if (memorySlot.canContain(size)) {
+                if (best == null || memorySlot.getSize() < best.getSize()) {
+                    best = memorySlot;
+                }
+            }
+        }
+
+        if (best != null) {
+            if (best.getSize() == size) {
+                list.remove(best);
+                return best;
+            } else {
+                return best.assignMemory(size);
+            }
+        }
+
+        System.out.println("Error - No suitable slot found (Best Fit)");
+        return null;
     }
-    
 }
