@@ -131,8 +131,5 @@ public abstract class FreeMemorySlotManager extends FreeMemoryManager{
         return ((float)(totalFree - largestSlot) / totalFree) * 100;
     }
     
-    public int getSize() {
-        return this.list.size();
-    }
     
 }
