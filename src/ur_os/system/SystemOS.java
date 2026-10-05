@@ -404,6 +404,7 @@ public class SystemOS implements Runnable{
             System.out.println("Free Memory Slots ("+os.fmm.getSize()+"): ");
             FreeMemorySlotManager msm = (FreeMemorySlotManager)os.fmm;
             System.out.println(msm);
+            System.out.printf("External fragmentation: %.2f%%%n", msm.getFragmentation());
         }
     }
     
